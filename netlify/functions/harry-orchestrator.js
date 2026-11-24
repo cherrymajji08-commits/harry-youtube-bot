@@ -1,4 +1,4 @@
-Harry (Lead YouTube Automation Agent)
+// Harry (Lead YouTube Automation Agent)
 // 1. Analyzes BOTH YouTube Trending videos and Google Trends (regionCode=IN)
 // 2. Generates a unique, non-copied Shorts script & metadata via Gemini API
 // 3. Uploads an MP4 video directly to YouTube via videos.insert (Resumable Upload)
