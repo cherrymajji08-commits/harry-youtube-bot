@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry & Chinna — YouTube Shorts Command</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card: #141b29;
+      --border: #253147;
+      --text: #e6edf7;
+      --muted: #93a4bf;
+      --accent: #3b82f6;
+      --green: #10b981;
+      --amber: #f59e0b;
+    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; padding: 16px; background: var(--bg); color: var(--text); }
+    .container { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    h1 { font-size: 1.35rem; margin: 0; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin: 10px 0 4px; }
+    input, select {
+      width: 100%; padding: 10px 12px; border-radius: 8px;
+      border: 1px solid var(--border); background: #0d131f; color: var(--text);
+      font-size: 0.95rem;
+    }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    button {
+      flex: 1; min-width: 150px; padding: 12px; border: none; border-radius: 8px;
+      font-weight: 600; font-size: 0.95rem; cursor: pointer; color: #fff;
+    }
+    .btn-primary { background: var(--accent); }
+    .btn-green { background: var(--green); }
+    .btn-amber { background: var(--amber); color: #0b0f17; }
+    pre {
+      background: #080c14; border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px; overflow-x: auto; font-size: 0.82rem; line-height: 1.45;
+      white-space: pre-wrap; word-break: break-word; margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <h1>Harry &amp; Chinna — YouTube Shorts HUD</h1>
+      <div class="sub">Trend Analysis • Gemini Script Gen • Auto-Upload • Bug Guard</div>
+    </div>
+
+    <div class="card">
+      <strong>1. Chinna (Maintenance Sub-agent)</strong>
+      <div class="sub">Verify Netlify Environment Variables, YouTube API, OAuth &amp; Gemini connectivity.</div>
+      <div class="btn-row">
+        <button class="btn-amber" onclick="runChinna()">Run Health Check</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>2. Harry (Trend Analysis &amp; Upload)</strong>
+      <label for="niche">Channel Niche</label>
+      <input id="niche" value="Tech & AI Facts in Telugu" />
+
+      <label for="language">Script Language</label>
+      <select id="language">
+        <option value="Telugu">Telugu</option>
+        <option value="English">English</option>
+      </select>
+
+      <label for="videoUrl">Direct MP4 Video URL (required only for Direct Upload)</label>
+      <input id="videoUrl" placeholder="https://example.com/my-short.mp4" />
+
+      <label for="privacy">Upload Privacy Status</label>
+      <select id="privacy">
+        <option value="private">Private (Recommended for first test)</option>
+        <option value="unlisted">Unlisted</option>
+        <option value="public">Public</option>
+      </select>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="runHarry('analyze_and_generate')">Analyze Trends &amp; Gen Script</button>
+        <button class="btn-green" onclick="runHarry('full_upload')">Generate &amp; Upload to YouTube</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>Output Log</strong>
+      <pre id="output">Ready. Tap a button above to start.</pre>
+    </div>
+  </div>
+
+  <script>
+    const out = document.getElementById("output");
+
+    async function runChinna() {
+      out.textContent = "Chinna is checking APIs & environment variables...";
+      try {
+        const res = await fetch("/.netlify/functions/chinna-maintenance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "health_check" })
+        });
+        out.textContent = JSON.stringify(await res.json(), null, 2);
+      } catch (e) {
+        out.textContent = "Error: " + e.message;
+      }
+    }
+
+    async function runHarry(mode) {
+      out.textContent = mode === "full_upload"
+        ? "Harry is analyzing trends, generating script, and uploading to YouTube..."
+        : "Harry is analyzing YouTube trends and generating a unique script...";
+      try {
+        const res = await fetch("/.netlify/functions/harry-orchestrator", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode,
+            regionCode: "IN",
+            niche: document.getElementById("niche").value,
+            language: document.getElementById("language").value,
+            videoUrl: document.getElementById("videoUrl").value.trim(),
+            privacyStatus: document.getElementById("privacy").value
+          })
+        });
+        out.textContent = JSON.stringify(await res.json(), null, 2);
+      } catch (e) {
+        out.textContent = "Error: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
